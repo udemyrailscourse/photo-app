@@ -1,0 +1,47 @@
+<%= form_for @image, :html => { multipart: true, :class => "form-horizontal image" } do |f| %>
+
+    <% if @image.errors.any? %>
+    <div id="error_expl" class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= pluralize(@image.errors.count, "error") %> prohibited this image from being saved:</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+        <% @image.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="control-group">
+    <%= f.label :name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :name, :class => 'form-control' %>
+    </div>
+    <%= error_span(@image[:name]) %>
+  </div>
+  <div class="control-group">
+    <%= f.label :picture, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.file_field :picture, accept: 'image/jpeg,image/gif,image/png' %>
+    </div>
+    <%= error_span(@image[:picture]) %>
+  </div>
+
+
+  <%= f.submit nil, :class => 'btn btn-primary' %>
+  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+            images_path, :class => 'btn btn-default' %>
+
+<% end %>
+
+<script type="text/javascript">
+  $('#image_picture').bind('change', function() {
+    var size_in_megabytes = this.files[0].size/1024/1024;
+    if (size_in_megabytes > 5) {
+      alert('Maximum file size is 5MB.');
+    }
+  });
+</script>
